@@ -27,4 +27,8 @@ class Facility
     end
   end
 
+  def register_vehicle(vehicle)
+    @registered_vehicles << vehicle
+  end
+
 end
