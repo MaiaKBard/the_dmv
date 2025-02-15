@@ -14,7 +14,7 @@ class Facility
   end
 
   def collected_fees
-    current_year = 2023
+    current_year = Time.now.year
 
     @registered_vehicles.sum do |vehicle|
       if current_year - vehicle.year >= 25
@@ -28,6 +28,8 @@ class Facility
   end
 
   def register_vehicle(vehicle)
+    vehicle.registration_date = Date.today
+    
     @registered_vehicles << vehicle
   end
 
