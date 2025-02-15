@@ -17,7 +17,7 @@ class Vehicle
     @model = vehicle_details[:model]
     @engine = vehicle_details[:engine]
     @registration_date = registration_date
-    @plate_type = nil
+    @plate_type = plate_type
   end
 
   def antique?

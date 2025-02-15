@@ -3,8 +3,6 @@ require 'spec_helper'
 RSpec.describe Facility do
   before(:each) do
     @facility = Facility.new({name: 'DMV Tremont Branch', address: '2855 Tremont Place Suite 118 Denver CO 80205', phone: '(720) 865-4600'})
-
-    @facility_1 = Facility.new({name: 'DMV Tremont Branch', address: '2855 Tremont Place Suite 118 Denver CO 80205', phone: '(720) 865-4600'})
     @facility_2 = Facility.new({name: 'DMV Northeast Branch', address: '4685 Peoria Street Suite 101 Denver CO 80239', phone: '(720) 865-4600'})
 
     @cruz = Vehicle.new({vin: '123456789abcdefgh', year: 2012, make: 'Chevrolet', model: 'Cruz', engine: :ice} )
@@ -32,34 +30,46 @@ RSpec.describe Facility do
     end
 
     it 'can add servies per facility' do
-   
-      @facility_1.add_service('Vehicle Registration')
-      expect(@facility_1.services).to eq(['Vehicle Registration'])
+      @facility.add_service('Vehicle Registration')
+      expect(@facility.services).to eq(['Vehicle Registration'])
     end
 
     it 'has each facility hold their registered vehicles' do
-
-      expect(@facility_1.registered_vehicles).to eq([])
+      expect(@facility.registered_vehicles).to eq([])
     end
 
     it 'can collect fees' do
-
-      expect(@facility_1.collected_fees).to eq(0)
+      expect(@facility.collected_fees).to eq(0)
     end
 
     it 'can register a vehicle and update registration date' do
-
-      @facility_1.register_vehicle(@cruz)
-
-      expect(@facility_1.registered_vehicles).to eq([@cruz])
+      @facility.add_service('Vehicle Registration')
+      @facility.register_vehicle(@cruz)
+      @facility.register_vehicle(@bolt)
+      
+      expect(@facility.registered_vehicles).to eq([@cruz, @bolt])
       expect(@cruz.registration_date).to be_a(Date)
       expect(@cruz.registration_date).to eq(Date.today)
+      expect(@cruz.plate_type).to eq(:regular)
     end
 
-   
+    it "can't perform services unless they are added to a facility" do
+      @facility_2.register_vehicle(@cruz)
+      @facility_2.collected_fees
 
+      expect(@facility_2.register_vehicle(@cruz)).to be nil
+      expect(@facility_2.registered_vehicles).to eq([])
+      expect(@facility_2.services).to eq([])
+      expect(@facility_2.collected_fees).to eq(0)
 
-      
-    
-  end
+      @facility_2.add_service('Vehicle Registration')
+
+      @facility_2.register_vehicle(@cruz)
+      @facility_2.collected_fees
+
+      expect(@facility_2.registered_vehicles).to eq([@cruz])
+      expect(@facility_2.services).to eq(["Vehicle Registration"])
+      expect(@facility_2.collected_fees).to eq(100)
+    end
+   end
 end

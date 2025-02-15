@@ -19,7 +19,7 @@ class Facility
     @registered_vehicles.sum do |vehicle|
       if current_year - vehicle.year >= 25
         25
-      elsif vehicle.engine == "ev"
+      elsif vehicle.engine == :ev
         200
       else 
         100
@@ -28,9 +28,17 @@ class Facility
   end
 
   def register_vehicle(vehicle)
-    vehicle.registration_date = Date.today
+    return unless @services.include?('Vehicle Registration')
     
+    vehicle.registration_date = Date.today
+    current_year = Time.now.year
+      if current_year - vehicle.year >= 25
+        vehicle.plate_type = :antique
+      elsif vehicle.engine == :ev
+        vehicle.plate_type = :ev
+      else
+        vehicle.plate_type = :regular
+    end
     @registered_vehicles << vehicle
   end
-
 end
