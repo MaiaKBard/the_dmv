@@ -12,4 +12,19 @@ class Facility
   def add_service(service)
     @services << service
   end
+
+  def collected_fees
+    current_year = 2023
+
+    @registered_vehicles.sum do |vehicle|
+      if current_year - vehicle.year >= 25
+        25
+      elsif vehicle.engine == "ev"
+        200
+      else 
+        100
+      end
+    end
+  end
+
 end

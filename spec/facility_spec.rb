@@ -42,7 +42,12 @@ RSpec.describe Facility do
       expect(@facility_1.registered_vehicles).to eq([])
     end
 
+    it 'can collect fees' do
       
+      expect(@facility_1.collected_fees).to eq(0)
+    end
+
+
       
     
   end
