@@ -53,7 +53,7 @@ RSpec.describe Facility do
       expect(@cruz.plate_type).to eq(:regular)
     end
 
-    it "can't perform services unless they are added to a facility" do
+    it 'can not perform services unless they are added to a facility' do
       @facility_2.register_vehicle(@cruz)
       @facility_2.collected_fees
 
