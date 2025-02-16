@@ -51,9 +51,12 @@ class Facility
   end
 
   def administer_road_test(registrant)
-    # binding.pry
     return false unless @services.include?('Road Test') && registrant.license_data[:written]
-    # binding.pry
     registrant.license_data[:license] = true
+  end
+
+  def renew_drivers_license(registrant)
+    return false unless @services.include?('Renew License') && registrant.license_data[:license]
+    registrant.license_data[:renewed] = true
   end
 end
