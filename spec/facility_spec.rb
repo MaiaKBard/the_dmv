@@ -75,38 +75,85 @@ RSpec.describe Facility do
       expect(@facility_2.services).to eq(["Vehicle Registration"])
       expect(@facility_2.collected_fees).to eq(100)
     end
-   end
+  end
 
-   describe '#written_test' do
-    it 'can display license data' do
-      expect(@registrant_1.license_data).to eq({:written=>false, :license=>false, :renewed=>false})
+   describe '#written test' do
+      it 'can display license data' do
+        expect(@registrant_1.license_data).to eq({:written=>false, :license=>false, :renewed=>false})
+      end
+
+      it 'can detect a permit' do
+        expect(@registrant_1.permit?).to eq(true)
+      end
+
+      it 'a facility can administer written test to a registrant' do
+        @facility.add_service('Written Test')
+        expect(@facility.services).to eq(['Written Test'])
+
+        expect(@facility.administer_written_test(@registrant_1)).to eq(true)
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false})
+      end
+
+      it "can only administer the test if facility has the service" do
+
+        expect(@facility.services).to eq([])
+        expect(@facility.administer_written_test(@registrant_1)).to eq(false)
+        expect(@registrant_1.license_data).to eq({:written=>false, :license=>false, :renewed=>false})
+  
+        @facility.add_service('Written Test')
+        expect(@facility.services).to eq(['Written Test'])
+
+        expect(@facility.administer_written_test(@registrant_1)).to eq(true)
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false})
+      end
     end
 
-    it 'can detect a permit' do
-      expect(@registrant_1.permit?).to eq(true)
+    describe '#road test' do
+      it 'can only adminster road test if registrant passed written test' do
+      # binding.pry
+        @facility.add_service('Written Test')
+        @facility.add_service('Road Test')
+        @facility.administer_written_test(@registrant_1)
+
+        expect(@facility.administer_road_test(@registrant_1)).to eq(true)
+        expect(@registrant_1.license_data).to eq({ written: true, license: true, renewed: false })
+
+        @facility.add_service('Written Test')
+        @facility.add_service('Road Test')
+        @facility.administer_written_test(@registrant_3)
+      #  binding.pry
+        expect(@facility.administer_road_test(@registrant_3)).to eq(false)
+        expect(@registrant_3.license_data).to eq({ written: false, license: false, renewed: false })
+      end
+
+      it 'a facility can administer road test to a registrant' do
+        # binding.pry
+        @facility.add_service('Written Test')
+        @facility.add_service('Road Test')
+        expect(@facility.services).to eq(['Written Test', 'Road Test'])
+
+        expect(@facility.administer_written_test(@registrant_1)).to eq(true)
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false})
+
+        expect(@facility.administer_road_test(@registrant_1)).to eq(true)
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>true, :renewed=>false})
     end
 
-    it 'a facility can administer written test to a registrant' do
-      @facility.add_service('Written Test')
-      expect(@facility.services).to eq(['Written Test'])
+      it "can only administer the test if facility has the service" do
 
-      expect(@facility.administer_written_test(@registrant_1)).to eq(true)
-      expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false})
+        @facility.add_service('Written Test')
+        expect(@facility.services).to eq(['Written Test'])
+
+        expect(@facility.administer_written_test(@registrant_1)).to eq(true)
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false})
+        expect(@facility.administer_road_test(@registrant_1)).to eq(false)
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false})
+
+        @facility.add_service('Road Test')
+        expect(@facility.services).to eq(['Written Test', 'Road Test'])
+
+        expect(@facility.administer_road_test(@registrant_1)).to eq(true)
+        expect(@registrant_1.license_data).to eq({:written=>true, :license=>true, :renewed=>false})
     end
-
-    it "can only administer the test if facility has the service" do
-
-      expect(@facility.services).to eq([])
-      expect(@facility.administer_written_test(@registrant_1)).to eq(false)
-      expect(@registrant_1.license_data).to eq({:written=>false, :license=>false, :renewed=>false})
-    
-      @facility.add_service('Written Test')
-      expect(@facility.services).to eq(['Written Test'])
-
-      expect(@facility.administer_written_test(@registrant_1)).to eq(true)
-      expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false})
-    end
-      
-
   end
 end
