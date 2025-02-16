@@ -9,6 +9,10 @@ RSpec.describe Facility do
     @bolt = Vehicle.new({vin: '987654321abcdefgh', year: 2019, make: 'Chevrolet', model: 'Bolt', engine: :ev} )
     @camaro = Vehicle.new({vin: '1a2b3c4d5e6f', year: 1969, make: 'Chevrolet', model: 'Camaro', engine: :ice} )
 
+    @registrant_1 = Registrant.new('Bruce', 18, true )
+    @registrant_2 = Registrant.new('Penny', 16 )
+    @registrant_3 = Registrant.new('Tucker', 15 )
+
   end
   describe '#initialize' do
     it 'can initialize' do
@@ -42,7 +46,7 @@ RSpec.describe Facility do
       expect(@facility.collected_fees).to eq(0)
     end
 
-    it 'can register a vehicle and update registration date' do
+    it 'can register a vehicle, update registration date, and add plate type' do
       @facility.add_service('Vehicle Registration')
       @facility.register_vehicle(@cruz)
       @facility.register_vehicle(@bolt)
@@ -72,4 +76,37 @@ RSpec.describe Facility do
       expect(@facility_2.collected_fees).to eq(100)
     end
    end
+
+   describe '#written_test' do
+    it 'can display license data' do
+      expect(@registrant_1.license_data).to eq({:written=>false, :license=>false, :renewed=>false})
+    end
+
+    it 'can detect a permit' do
+      expect(@registrant_1.permit?).to eq(true)
+    end
+
+    it 'a facility can administer written test to a registrant' do
+      @facility.add_service('Written Test')
+      expect(@facility.services).to eq(['Written Test'])
+
+      expect(@facility.administer_written_test(@registrant_1)).to eq(true)
+      expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false})
+    end
+
+    it "can only administer the test if facility has the service" do
+
+      expect(@facility.services).to eq([])
+      expect(@facility.administer_written_test(@registrant_1)).to eq(false)
+      expect(@registrant_1.license_data).to eq({:written=>false, :license=>false, :renewed=>false})
+    
+      @facility.add_service('Written Test')
+      expect(@facility.services).to eq(['Written Test'])
+
+      expect(@facility.administer_written_test(@registrant_1)).to eq(true)
+      expect(@registrant_1.license_data).to eq({:written=>true, :license=>false, :renewed=>false})
+    end
+      
+
+  end
 end
