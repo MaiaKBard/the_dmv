@@ -1,4 +1,6 @@
 class Registrant
+    attr_accessor :license_data
+
     attr_reader :name, :age, :permit, :license_data
 
     def initialize(name, age, permit = false)
