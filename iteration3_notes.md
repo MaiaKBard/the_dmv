@@ -13,6 +13,7 @@ Create Facility objects from Multiple Data Sources:
 - It will need to pass through the DMVFacility class for each state
 
 I found Lambdas? Not sure if I quiet understand them but I want to try to use it...
+- they store blocks of code that can be executed later
 
 Test needed to use this -->
 
@@ -67,5 +68,22 @@ I will need to rewrite the input in the attribute spaces so if the data is not g
 
 --> now I would need to make sure the mapper will still set the feilds correclty even when given incomplete data
     -write expect statements for each attribute feild
+
+Test complete...
+
+Code to match test -->
+first always check for erors constantly 
+
+Key points noticed in test ill need to change in code
+
+- I will need to add in the argument of a mapper it looks like it can be named anything it an object holding the lambdas? i think...
+
+to impletment this i noticed a method being used in an example named .call it said it is used to invoke a lambdas object
+
+i can use state_mapper as the lambdas object which would be the same format as the my co_mapper, ny_mapper, and mo_mapper because those will be the lambdas objects ill be sendinf through my code
+
+
+- i would think my DMVFacility class would stay the same cause we want the output to be the same we just want to run differnt dmv data through this clas
+
 
 

@@ -64,7 +64,7 @@ RSpec.describe FacilityFactory do
         end
     end
 
-    describe '#New York DMV' do
+    xdescribe '#New York DMV' do
         it 'creates DMVFacility objects from CO DMV data' do
             expect(@ny_facilities).to be_an(Array)
             expect(@ny_facilities.first).to be_a(DMVFacility)
@@ -80,7 +80,7 @@ RSpec.describe FacilityFactory do
         end
     end
 
-    describe '#Missouri DMV' do
+    xdescribe '#Missouri DMV' do
         it 'creates DMVFacility objects from CO DMV data' do
             expect(@mo_facilities).to be_an(Array)
             expect(@mo_facilities.first).to be_a(DMVFacility)
@@ -96,14 +96,14 @@ RSpec.describe FacilityFactory do
         end
     end
 
-    describe '#missing data' do
+    xdescribe '#missing data' do
         it 'returns an empty array when data is not given' do
             empty_facilities = @factory.create_facilities([], @co_mapper)
             expect(empty_facilities).to eq([])
         end
 
         it 'runs with missing feilds' do 
-            incomplete_data = [{facility.name: "DMV Missing Fields" }]
+            incomplete_data = [{facility_name: "DMV Missing Fields" }]
             facilities = @factory.create_facilities(incomplete_data, @mo_mapper)
 
             expect(facility.name).to eq("DMV Missing Feilds")

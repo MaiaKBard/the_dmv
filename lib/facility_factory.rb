@@ -1,12 +1,7 @@
 class FacilityFactory
-    def create_facilities(dmv_data)
+    def create_facilities(dmv_data, state_mapper)
         dmv_data.map do |data|
-            DMVFacility.new(
-                name: data[:dmv_office],
-                address: "#{data[:address_li]}, #{data[:city]}, #{data[:state]} #{data[:zip]}",
-                phone: data[:phone],
-                services: data[:services_p]
-            )
+           state_mapper.call(data)
         end
     end
 end
