@@ -95,4 +95,22 @@ RSpec.describe FacilityFactory do
             expect(facility.services).to eq(@mo_dmv_data.first[:services_p])
         end
     end
+
+    describe '#missing data' do
+        it 'returns an empty array when data is not given' do
+            empty_facilities = @factory.create_facilities([], @co_mapper)
+            expect(empty_facilities).to eq([])
+        end
+
+        it 'runs with missing feilds' do 
+            incomplete_data = [{facility.name: "DMV Missing Fields" }]
+            facilities = @factory.create_facilities(incomplete_data, @mo_mapper)
+
+            expect(facility.name).to eq("DMV Missing Feilds")
+            expect(facility.address).to eq(" , , ") #i looked up how to format this correctly not sure if this is correct
+            expect(facility.phone).to eq(nil)
+            expect(facility.services).to eq(nil)
+
+        end
+    end
 end

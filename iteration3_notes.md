@@ -53,4 +53,19 @@ I need to keep it 'exsists' test
 
 2. I need to repeat the same process for each DMV to make sure they all function correctly
 
+3. Handles Missing Feilds - if feilds given are not met it should not break the application and still spit back what feilds are met
+
+--> I need to create a test that will return an empty aray if a data set it not given in my method .create_facilities()
+
+--> I need to create a test that will allow the system to still function when not all the feilds within the hash are given within the data set 
+
+I will need to rewrite the input in the attribute spaces so if the data is not given it will output nil or nothing or string possibly
+
+--> to test this i should define a line of incomplet data given
+--> call that imcomplete data within the .create_facilities(incomplete_data, @mo_mapper)
+    -it needs to process this input and output facility objects still
+
+--> now I would need to make sure the mapper will still set the feilds correclty even when given incomplete data
+    -write expect statements for each attribute feild
+
 
