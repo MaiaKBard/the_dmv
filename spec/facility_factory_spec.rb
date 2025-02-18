@@ -48,21 +48,51 @@ RSpec.describe FacilityFactory do
         expect(@factory).to be_a(FacilityFactory)
     end
 
-    
-    
-    
-    
-    it 'creates DMVFacility objects from CO DMV date' do
-        expect(@facilities).to be_an(Array)
-        expect(@facilities.first).to be_a(DMVFacility)
+    describe '#Colorado DMV' do
+        it 'creates DMVFacility objects from CO DMV data' do
+            expect(@co_facilities).to be_an(Array)
+            expect(@co_facilities.first).to be_a(DMVFacility)
+        end
+
+        it 'assigns correct attributes' do
+            facility = @co_facilities.first
+
+            expect(facility.name).to eq(@co_dmv_data.first[:dmv_office])
+            expect(facility.address).to eq("#{@co_dmv_data.first[:address_li]}, #{@co_dmv_data.first[:city]}, #{@co_dmv_data.first[:state]} #{@co_dmv_data.first[:zip]}")
+            expect(facility.phone).to eq(@co_dmv_data.first[:phone])
+            expect(facility.services).to eq(@co_dmv_data.first[:services_p])
+        end
     end
 
-    it 'assigns correct attributes' do
-        facility = @facilities.first
+    describe '#New York DMV' do
+        it 'creates DMVFacility objects from CO DMV data' do
+            expect(@ny_facilities).to be_an(Array)
+            expect(@ny_facilities.first).to be_a(DMVFacility)
+        end
 
-        expect(facility.name).to eq(@co_dmv_data.first[:dmv_office])
-        expect(facility.address).to eq("#{@co_dmv_data.first[:address_li]}, #{@co_dmv_data.first[:city]}, #{@co_dmv_data.first[:state]} #{@co_dmv_data.first[:zip]}")
-        expect(facility.phone).to eq(@co_dmv_data.first[:phone])
-        expect(facility.services).to eq(@co_dmv_data.first[:services_p])
+        it 'assigns correct attributes' do
+            facility = @ny_facilities.first
+
+            expect(facility.name).to eq(@ny_dmv_data.first[:dmv_office])
+            expect(facility.address).to eq("#{@ny_dmv_data.first[:address_li]}, #{@co_dmv_data.first[:city]}, #{@co_dmv_data.first[:state]} #{@co_dmv_data.first[:zip]}")
+            expect(facility.phone).to eq(@ny_dmv_data.first[:phone])
+            expect(facility.services).to eq(@ny_dmv_data.first[:services_p])
+        end
+    end
+
+    describe '#Missouri DMV' do
+        it 'creates DMVFacility objects from CO DMV data' do
+            expect(@mo_facilities).to be_an(Array)
+            expect(@mo_facilities.first).to be_a(DMVFacility)
+        end
+
+        it 'assigns correct attributes' do
+            facility = @mo_facilities.first
+
+            expect(facility.name).to eq(@mo_dmv_data.first[:dmv_office])
+            expect(facility.address).to eq("#{@mo_dmv_data.first[:address_li]}, #{@co_dmv_data.first[:city]}, #{@co_dmv_data.first[:state]} #{@co_dmv_data.first[:zip]}")
+            expect(facility.phone).to eq(@mo_dmv_data.first[:phone])
+            expect(facility.services).to eq(@mo_dmv_data.first[:services_p])
+        end
     end
 end
