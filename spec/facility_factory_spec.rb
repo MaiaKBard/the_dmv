@@ -8,40 +8,9 @@ RSpec.describe FacilityFactory do
         @co_dmv_data = DmvDataService.new.co_dmv_office_locations
         @ny_dmv_data = DmvDataService.new.ny_dmv_office_locations
         @mo_dmv_data = DmvDataService.new.mo_dmv_office_locations
-
-        #mapper for each differnt state
-        @co_mapper = lambda do |data|
-            DMVFacility.new(
-                name: data[:dmv_office] || "DMV Missing Fields",
-                address: "#{data[:address_li] || ''}, #{data[:city] || ''}, #{data[:state] || ''} #{data[:zip] || ''}",
-                phone: data[:phone] || nil,
-                services: data[:services_p] || nil
-            )
-        end
-
-        @ny_mapper = lambda do |data|
-            DMVFacility.new(
-                name: data[:office_name] || "DMV Missing Fields",
-                address: "#{data[:street_address_line_1] || ''}, #{data[:city] || ''}, #{data[:state] || ''} #{data[:zip_code] || ''}",
-                phone: data[:phone] || nil,
-                services: data[:services_p] || nil
-            )
-        end
-
-        @mo_mapper = lambda do |data|
-            DMVFacility.new(
-                name: data[:dmv_office] || "DMV Missing Fields",
-                address: "#{data[:address1] || ''}, #{data[:city] || ''}, #{data[:state] || ''} #{data[:zipcode] || ''}",
-                phone: data[:phone] || nil,
-                services: data[:services_p] || nil
-            )
-        end
-
-        #creating facilities including the mapper instance
-        @co_facilities = @factory.create_facilities(@co_dmv_data, @co_mapper)
-        @ny_facilities = @factory.create_facilities(@ny_dmv_data, @ny_mapper)
-        @mo_facilities = @factory.create_facilities(@mo_dmv_data, @mo_mapper)
-
+        @co_facilities = @factory.create_facilities(@co_dmv_data, co_mapper)
+        @ny_facilities = @factory.create_facilities(@ny_dmv_data, ny_mapper)
+        @mo_facilities = @factory.create_facilities(@mo_dmv_data, mo_mapper)
     end
 
     it 'exists' do
@@ -71,7 +40,6 @@ RSpec.describe FacilityFactory do
         end
 
         it 'assigns correct attributes' do
-            # binding.pry
             facility = @ny_facilities.first
 
             expect(facility.name).to eq(@ny_dmv_data.first[:office_name])
@@ -88,7 +56,6 @@ RSpec.describe FacilityFactory do
         end
 
         it 'assigns correct attributes' do
-            # binding.pry
             facility = @mo_facilities.first
 
             expect(facility.name).to eq("DMV Missing Fields")
@@ -100,13 +67,13 @@ RSpec.describe FacilityFactory do
 
     describe '#missing data' do
         it 'returns an empty array when data is not given' do
-            empty_facilities = @factory.create_facilities([], @co_mapper)
+            empty_facilities = @factory.create_facilities([], co_mapper)
             expect(empty_facilities).to eq([])
         end
 
         it 'runs with missing feilds' do 
             incomplete_data = [{facility_name: "DMV Missing Fields" }]
-            facilities = @factory.create_facilities(incomplete_data, @mo_mapper)
+            facilities = @factory.create_facilities(incomplete_data, mo_mapper)
 
             facility = facilities.first
 
@@ -114,7 +81,6 @@ RSpec.describe FacilityFactory do
             expect(facility.address).to eq("#{incomplete_data.first[:address_li].to_s.strip}, #{incomplete_data.first[:city].to_s.strip}, #{incomplete_data.first[:state].to_s.strip} #{incomplete_data.first[:zip].to_s.strip}")
             expect(facility.phone).to eq(nil)
             expect(facility.services).to eq(nil)
-
         end
     end
 end
