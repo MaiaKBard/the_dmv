@@ -12,28 +12,28 @@ RSpec.describe FacilityFactory do
         #mapper for each differnt state
         @co_mapper = lambda do |data|
             DMVFacility.new(
-                name: data[:dmv_office],
-                address: "#{data[:address_li]}, #{data[:city]}, #{data[:state]} #{data[:zip]}",
-                phone: data[:phone],
-                services: data[:services_p]
+                name: data[:dmv_office] || "DMV Missing Fields",
+                address: "#{data[:address_li] || ''}, #{data[:city] || ''}, #{data[:state] || ''} #{data[:zip] || ''}",
+                phone: data[:phone] || nil,
+                services: data[:services_p] || nil
             )
         end
 
         @ny_mapper = lambda do |data|
             DMVFacility.new(
-                name: data[:dmv_office],
-                address: "#{data[:address_li]}, #{data[:city]}, #{data[:state]} #{data[:zip]}",
-                phone: data[:phone],
-                services: data[:services_p]
+                name: data[:office_name] || "DMV Missing Fields",
+                address: "#{data[:street_address_line_1] || ''}, #{data[:city] || ''}, #{data[:state] || ''} #{data[:zip_code] || ''}",
+                phone: data[:phone] || nil,
+                services: data[:services_p] || nil
             )
         end
 
         @mo_mapper = lambda do |data|
             DMVFacility.new(
-                name: data[:dmv_office],
-                address: "#{data[:address_li]}, #{data[:city]}, #{data[:state]} #{data[:zip]}",
-                phone: data[:phone],
-                services: data[:services_p]
+                name: data[:dmv_office] || "DMV Missing Fields",
+                address: "#{data[:address1] || ''}, #{data[:city] || ''}, #{data[:state] || ''} #{data[:zipcode] || ''}",
+                phone: data[:phone] || nil,
+                services: data[:services_p] || nil
             )
         end
 
@@ -64,39 +64,41 @@ RSpec.describe FacilityFactory do
         end
     end
 
-    xdescribe '#New York DMV' do
+    describe '#New York DMV' do
         it 'creates DMVFacility objects from CO DMV data' do
             expect(@ny_facilities).to be_an(Array)
             expect(@ny_facilities.first).to be_a(DMVFacility)
         end
 
         it 'assigns correct attributes' do
+            # binding.pry
             facility = @ny_facilities.first
 
-            expect(facility.name).to eq(@ny_dmv_data.first[:dmv_office])
-            expect(facility.address).to eq("#{@ny_dmv_data.first[:address_li]}, #{@co_dmv_data.first[:city]}, #{@co_dmv_data.first[:state]} #{@co_dmv_data.first[:zip]}")
+            expect(facility.name).to eq(@ny_dmv_data.first[:office_name])
+            expect(facility.address).to eq("#{@ny_dmv_data.first[:street_address_line_1]}, #{@ny_dmv_data.first[:city]}, #{@ny_dmv_data.first[:state]} #{@ny_dmv_data.first[:zip_code]}")
             expect(facility.phone).to eq(@ny_dmv_data.first[:phone])
             expect(facility.services).to eq(@ny_dmv_data.first[:services_p])
         end
     end
 
-    xdescribe '#Missouri DMV' do
+    describe '#Missouri DMV' do
         it 'creates DMVFacility objects from CO DMV data' do
             expect(@mo_facilities).to be_an(Array)
             expect(@mo_facilities.first).to be_a(DMVFacility)
         end
 
         it 'assigns correct attributes' do
+            # binding.pry
             facility = @mo_facilities.first
 
-            expect(facility.name).to eq(@mo_dmv_data.first[:dmv_office])
-            expect(facility.address).to eq("#{@mo_dmv_data.first[:address_li]}, #{@co_dmv_data.first[:city]}, #{@co_dmv_data.first[:state]} #{@co_dmv_data.first[:zip]}")
+            expect(facility.name).to eq("DMV Missing Fields")
+            expect(facility.address).to eq("#{@mo_dmv_data.first[:address1]}, #{@mo_dmv_data.first[:city]}, #{@mo_dmv_data.first[:state]} #{@mo_dmv_data.first[:zipcode]}")
             expect(facility.phone).to eq(@mo_dmv_data.first[:phone])
             expect(facility.services).to eq(@mo_dmv_data.first[:services_p])
         end
     end
 
-    xdescribe '#missing data' do
+    describe '#missing data' do
         it 'returns an empty array when data is not given' do
             empty_facilities = @factory.create_facilities([], @co_mapper)
             expect(empty_facilities).to eq([])
@@ -106,8 +108,10 @@ RSpec.describe FacilityFactory do
             incomplete_data = [{facility_name: "DMV Missing Fields" }]
             facilities = @factory.create_facilities(incomplete_data, @mo_mapper)
 
-            expect(facility.name).to eq("DMV Missing Feilds")
-            expect(facility.address).to eq(" , , ") #i looked up how to format this correctly not sure if this is correct
+            facility = facilities.first
+
+            expect(facility.name).to eq("DMV Missing Fields")
+            expect(facility.address).to eq("#{incomplete_data.first[:address_li].to_s.strip}, #{incomplete_data.first[:city].to_s.strip}, #{incomplete_data.first[:state].to_s.strip} #{incomplete_data.first[:zip].to_s.strip}")
             expect(facility.phone).to eq(nil)
             expect(facility.services).to eq(nil)
 

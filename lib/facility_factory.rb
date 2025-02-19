@@ -16,3 +16,32 @@ class DMVFacility
         @services = services
     end
 end
+
+
+#mappers for each state
+co_mapper = lambda do |data|
+    DMVFacility.new(
+        name: data[:dmv_office] || "DMV Missing Fields",
+        address: "#{data[:address_li] || ''}, #{data[:city] || ''}, #{data[:state] || ''} #{data[:zip] || ''}",
+        phone: data[:phone] || nil,
+        services: data[:services_p] || nil
+    )
+end
+
+ny_mapper = lambda do |data|
+    DMVFacility.new(
+        name: data[:office_name] || "DMV Missing Fields",
+        address: "#{data[:street_address_line_1] || ''}, #{data[:city] || ''}, #{data[:state] || ''} #{data[:zip_code] || ''}",
+        phone: data[:phone] || nil,
+        services: data[:services_p] || nil
+    )
+end
+
+mo_mapper = lambda do |data|
+    DMVFacility.new(
+        name: data[:dmv_office] || "DMV Missing Fields",
+        address: "#{data[:address1] || ''}, #{data[:city] || ''}, #{data[:state] || ''} #{data[:zipcode] || ''}",
+        phone: data[:phone] || nil,
+        services: data[:services_p] || nil
+    )
+end

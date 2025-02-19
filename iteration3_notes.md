@@ -83,7 +83,18 @@ to impletment this i noticed a method being used in an example named .call it sa
 i can use state_mapper as the lambdas object which would be the same format as the my co_mapper, ny_mapper, and mo_mapper because those will be the lambdas objects ill be sendinf through my code
 
 
-- i would think my DMVFacility class would stay the same cause we want the output to be the same we just want to run differnt dmv data through this clas
+- i would think my DMVFacility class would stay the same cause we want the output to be the same we just want to run differnt dmv data through this class
+
+- next it looks like i need to input each mapper in my code file which im just going to define them at the end of my code file to not sure if they should be put somewhere else
+
+Errors
+
+I need to impelement the response given in the code when data is missing 
+--> I could use || so it knows if this data is missing print this
+--> first ill try it in my test file if it does not pass ill do it in my code file as well
+
+--> the address formaet I looked up 
+the to_s.strip this makes sure the feild is converted into a string and then .strip removes any spaces 
 
 
 
